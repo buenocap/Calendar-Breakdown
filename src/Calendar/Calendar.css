@@ -1,0 +1,42 @@
+table {
+  table-layout: fixed;
+}
+
+th {
+  text-align: center;
+}
+
+td {
+  height: 150px;
+  overflow: hidden;
+}
+
+.overflowControl {
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  width: 100%;
+  display: block;
+  overflow: hidden;
+}
+
+.calendar-form {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.selection-input {
+  display: flex;
+  gap: 0.5rem;
+  align-items: center;
+}
+
+.allDay {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.input-label {
+  margin-right: 0.25rem;
+}

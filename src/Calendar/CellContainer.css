@@ -1,0 +1,32 @@
+.icon-format {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.icon-format-title {
+  display: flex;
+  gap: 0.5rem;
+  align-items: center;
+}
+
+.eventColor {
+  width: 15px;
+  height: 15px;
+  border-radius: 20%;
+}
+
+.currentDay {
+  background-color: #4285f4;
+  color: whitesmoke;
+  border-radius: 50%;
+  width: 25px;
+  height: 25px;
+  text-align: center;
+}
+
+.eventTitle {
+  display: flex;
+  text-align: center;
+  align-items: center;
+  justify-content: center;
+}
