@@ -43,7 +43,13 @@ function App() {
 
   return (
     <div>
-      <Calendar initalState={initalState} />
+      <h1>Calendar</h1>
+      <div className="d-flex">
+        <div>Sidebar</div>
+        <div className="border shadow mb-3">
+          <Calendar initalState={initalState} />
+        </div>
+      </div>
     </div>
   );
 }

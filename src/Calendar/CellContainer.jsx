@@ -82,9 +82,9 @@ export default function CellContainer({
       month = "0" + month;
     }
 
-    if (day < 10) {
-      day = "0" + day;
-    }
+    // if (day < 10) {
+    //   day = "0" + day;
+    // }
 
     return `${year}-${month}-${day}`;
   }
@@ -122,6 +122,7 @@ export default function CellContainer({
               {userData.map((user) => {
                 return user.events.map((event) => {
                   let eventStartDate = event.startTime.split("T")[0];
+
                   if (cellIdentifier === eventStartDate) {
                     return (
                       <div
@@ -171,7 +172,13 @@ export default function CellContainer({
               </div>
               <div className="icon-format">
                 <i className="bi bi-justify-left"></i>
-                <p>{currentEvent?.description}</p>
+                {currentEvent?.description ? (
+                  <p>{currentEvent?.description}</p>
+                ) : (
+                  <p style={{ fontStyle: "italic", color: "gray" }}>
+                    No Description
+                  </p>
+                )}
               </div>
             </Modal.Body>
             <Modal.Footer>

@@ -32,8 +32,8 @@ export default function Calendar(initalState) {
           eventID: uniqid(),
           title: "Birthday",
           description: "Happy Birthday",
-          startTime: "2024-12-05T10:00:00",
-          endTime: "2024-12-05T11:00:00",
+          startTime: "2025-01-05T10:00:00",
+          endTime: "2025-01-05T11:00:00",
           allDay: false,
           assignedColor: "orange",
           owner: "johnDoe",
@@ -42,8 +42,8 @@ export default function Calendar(initalState) {
           eventID: uniqid(),
           title: "Second Birthday",
           description: "Happy 2nd Birthday",
-          startTime: "2024-12-05T10:00:00",
-          endTime: "2024-12-05T23:45:00",
+          startTime: "2025-01-05T10:00:00",
+          endTime: "2025-01-05T23:45:00",
           allDay: false,
           assignedColor: "red",
           owner: "johnDoe",
@@ -139,13 +139,14 @@ export default function Calendar(initalState) {
       // Add numbered days to the first week
       for (let dayNum = 1; dayNum < initialWeekDays; dayNum++) {
         const dayString = dayNum < 10 ? `0${dayNum}` : dayNum;
+        const monthString = month < 10 ? `0${month}` : month;
         currentWeek.push(
           <CellContainer
             type="number"
             number={dayNum}
             userData={userData}
-            cellIdentifier={`${year}-${month}-${dayString}`}
-            key={`Cell-${year}-${month}-${dayNum}`}
+            cellIdentifier={`${year}-${monthString}-${dayString}`}
+            key={`Cell-${year}-${monthString}-${dayNum}`}
           />
         );
       }
@@ -159,13 +160,14 @@ export default function Calendar(initalState) {
           if (dayNum > totalDaysInMonth) break;
 
           const dayString = dayNum < 10 ? `0${dayNum}` : dayNum;
+          const monthString = month < 10 ? `0${month}` : month;
           currentWeek.push(
             <CellContainer
               type="number"
               number={dayNum}
               userData={userData}
-              cellIdentifier={`${year}-${month}-${dayString}`}
-              key={`Cell-${year}-${month}-${dayNum}`}
+              cellIdentifier={`${year}-${monthString}-${dayString}`}
+              key={`Cell-${year}-${monthString}-${dayString}`}
             />
           );
           dayNum++;
@@ -198,7 +200,7 @@ export default function Calendar(initalState) {
 
   return (
     <div className="body">
-      <div className="calendar-form">
+      <div className="calendar-form m-3">
         <form className="selection-input">
           <div>
             <label htmlFor="month" className="input-label">
