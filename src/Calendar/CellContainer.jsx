@@ -22,6 +22,14 @@ export default function CellContainer({
     "Capybara2.jpeg",
     "Capybara3.jpeg",
     "Capybara4.jpeg",
+    "Capybara5.jpeg",
+    "Capybara6.jpeg",
+    "Capybara7.jpeg",
+    "Capybara8.jpeg",
+    "Capybara9.jpeg",
+    "Capybara10.jpeg",
+    "Capybara11.jpeg",
+    "Capybara12.jpeg",
   ];
 
   function selectRandomImage() {
