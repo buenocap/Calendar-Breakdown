@@ -1,5 +1,6 @@
 import "bootstrap/dist/css/bootstrap.min.css";
 import Calendar from "./Calendar/Calendar";
+import "./App.css";
 
 function App() {
   // Initial Calendar Data
@@ -46,7 +47,7 @@ function App() {
       <h1>Calendar</h1>
       <div className="d-flex">
         <div>Sidebar</div>
-        <div className="border shadow mb-3">
+        <div className="border shadow mb-3 calendar">
           <Calendar initalState={initalState} />
         </div>
       </div>

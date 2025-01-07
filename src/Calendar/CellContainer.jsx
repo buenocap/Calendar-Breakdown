@@ -8,14 +8,19 @@ export default function CellContainer({
   number,
   userData,
   cellIdentifier,
+  onDelete,
 }) {
   const [show, setShow] = useState(false);
   const [currentID, setCurrentID] = useState(0);
   const [currentEvent, setCurrentEvent] = useState({});
-  const handleClose = () => setShow(false);
+  const handleClose = () => {
+    setEditMode(false);
+    setShow(false);
+  };
   const handleShow = () => setShow(true);
   var currentCalendarDay = toISOformat(new Date().toLocaleDateString());
   const [selectedImage, setSelectedImage] = useState("");
+  const [editMode, setEditMode] = useState(false);
 
   const headerImage = [
     "Capybara1.jpeg",
@@ -31,6 +36,15 @@ export default function CellContainer({
     "Capybara11.jpeg",
     "Capybara12.jpeg",
   ];
+
+  function handleEdit() {
+    setEditMode(!editMode);
+  }
+
+  function handleDelete() {
+    onDelete(currentEvent);
+    handleClose();
+  }
 
   function selectRandomImage() {
     const randomIndex = Math.floor(Math.random() * headerImage.length);
@@ -190,12 +204,21 @@ export default function CellContainer({
               </div>
             </Modal.Body>
             <Modal.Footer>
-              <Button variant="secondary" onClick={handleClose}>
-                Close
+              {!editMode && (
+                <Button variant="secondary" onClick={handleClose}>
+                  Close
+                </Button>
+              )}
+
+              <Button variant="primary" onClick={handleEdit}>
+                {editMode ? "Cancel" : "Edit"}
               </Button>
-              <Button variant="primary" onClick={handleClose}>
-                Edit
-              </Button>
+
+              {editMode && (
+                <Button variant="danger" onClick={handleDelete}>
+                  <i className="bi bi-trash"></i>
+                </Button>
+              )}
             </Modal.Footer>
           </Modal>
         </>

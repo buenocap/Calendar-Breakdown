@@ -82,7 +82,7 @@ export default function Calendar(initalState) {
     };
 
     // Add the new event to the user's events
-    const updatedUserData = [...userData];
+    const updatedUserData = JSON.parse(JSON.stringify(userData));
     const userIndex = updatedUserData.findIndex(
       (user) => user.userID === e.target.formOwner?.value
     );
@@ -102,6 +102,21 @@ export default function Calendar(initalState) {
     setFormEndTime("");
     setAllDayEvents(false);
     setFormColor("#4285F4");
+  };
+
+  const handleDeleteEvent = (event) => {
+    // Remove the event from the user's events
+    const updatedUserData = JSON.parse(JSON.stringify(userData));
+    const userIndex = updatedUserData.findIndex(
+      (user) => user.userID === event.owner
+    );
+    if (userIndex !== -1) {
+      updatedUserData[userIndex].events = updatedUserData[
+        userIndex
+      ].events.filter((e) => e.eventID !== event.eventID);
+    }
+
+    setUserData(updatedUserData);
   };
 
   function handleMonthChange(e) {
@@ -145,6 +160,7 @@ export default function Calendar(initalState) {
             type="number"
             number={dayNum}
             userData={userData}
+            onDelete={handleDeleteEvent}
             cellIdentifier={`${year}-${monthString}-${dayString}`}
             key={`Cell-${year}-${monthString}-${dayNum}`}
           />
@@ -166,6 +182,7 @@ export default function Calendar(initalState) {
               type="number"
               number={dayNum}
               userData={userData}
+              onDelete={handleDeleteEvent}
               cellIdentifier={`${year}-${monthString}-${dayString}`}
               key={`Cell-${year}-${monthString}-${dayString}`}
             />
