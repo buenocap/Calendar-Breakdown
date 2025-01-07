@@ -1,5 +1,9 @@
 import "bootstrap/dist/css/bootstrap.min.css";
 import Calendar from "./Calendar/Calendar";
+import Container from "react-bootstrap/Container";
+import Row from "react-bootstrap/Row";
+import Col from "react-bootstrap/Col";
+
 import "./App.css";
 
 function App() {
@@ -43,15 +47,22 @@ function App() {
   ];
 
   return (
-    <div>
-      <h1>Calendar</h1>
-      <div className="d-flex">
-        <div>Sidebar</div>
-        <div className="border shadow mb-3 calendar">
-          <Calendar initalState={initalState} />
-        </div>
-      </div>
-    </div>
+    <Container fluid>
+      <Row>
+        <Col>Calendar</Col>
+      </Row>
+      <Row>
+        <Col sm={2}>Sidebar</Col>
+        <Col sm={10}>
+          <div className="border shadow mb-3 calendar-container">
+            <Calendar initalState={initalState} />
+          </div>
+        </Col>
+      </Row>
+      <Row>
+        <Col>Footer</Col>
+      </Row>
+    </Container>
   );
 }
 
