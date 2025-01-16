@@ -8,11 +8,7 @@ export default function MenuBar() {
     <Navbar className="bg-body-tertiary mb-1">
       <Container>
         <Navbar.Brand href="#home">
-          <img
-            alt="Company logo"
-            src="/public/static/Capycal_logo.svg"
-            height={90}
-          />
+          <img alt="Company logo" src="/static/Capycal_logo.svg" height={90} />
           Capycal
         </Navbar.Brand>
       </Container>

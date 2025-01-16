@@ -171,7 +171,7 @@ export default function CellContainer({
           <Modal show={show} onHide={handleClose}>
             <Modal.Header>
               <Modal.Title>
-                <Image src={`../../static/${selectedImage}`} fluid rounded />
+                <Image src={`/static/${selectedImage}`} fluid rounded />
               </Modal.Title>
             </Modal.Header>
             <Modal.Body>
