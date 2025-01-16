@@ -50,6 +50,16 @@ export default function Calendar() {
           assignedColor: "green",
           owner: "johnDoe",
         },
+        {
+          eventID: uniqid(),
+          title: "Pedro's Birthday 🎂",
+          description: "Happy Birthday!!",
+          startTime: "2025-02-10T10:00:00",
+          endTime: "2025-02-10T23:45:00",
+          allDay: false,
+          assignedColor: "orange",
+          owner: "johnDoe",
+        },
       ],
     },
   ]);
