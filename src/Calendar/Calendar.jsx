@@ -8,7 +8,7 @@ import Modal from "react-bootstrap/Modal";
 import Form from "react-bootstrap/Form";
 import uniqid from "uniqid";
 
-export default function Calendar(initalState) {
+export default function Calendar() {
   // Date State Control
   const today = new Date();
   const [selectedMonth, setSelectedMonth] = useState(today.getMonth() + 1);
@@ -30,22 +30,24 @@ export default function Calendar(initalState) {
       events: [
         {
           eventID: uniqid(),
-          title: "Birthday",
-          description: "Happy Birthday",
-          startTime: "2025-01-05T10:00:00",
-          endTime: "2025-01-05T11:00:00",
-          allDay: false,
+          title: "2nd Year Anniversary",
+          description:
+            "Happy 2 Year Anniversary, Josue! I love you 💕 so much!!",
+          startTime: "2025-01-22",
+          endTime: "2025-01-22",
+          allDay: true,
           assignedColor: "orange",
           owner: "johnDoe",
         },
         {
           eventID: uniqid(),
-          title: "Second Birthday",
-          description: "Happy 2nd Birthday",
-          startTime: "2025-01-05T10:00:00",
-          endTime: "2025-01-05T23:45:00",
+          title: "Marleny's Birthday 🎂",
+          description:
+            "Happy Birthday Marleny!! Wish you the best friend! ☺️🥳",
+          startTime: "2025-05-15T10:00:00",
+          endTime: "2025-05-15T23:45:00",
           allDay: false,
-          assignedColor: "red",
+          assignedColor: "green",
           owner: "johnDoe",
         },
       ],
