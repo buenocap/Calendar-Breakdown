@@ -8,7 +8,7 @@ import Modal from "react-bootstrap/Modal";
 import Form from "react-bootstrap/Form";
 import uniqid from "uniqid";
 
-export default function Calendar() {
+export default function Calendar({ userInfo }) {
   // Date State Control
   const today = new Date();
   const [selectedMonth, setSelectedMonth] = useState(today.getMonth() + 1);
@@ -22,47 +22,49 @@ export default function Calendar() {
   const [formColor, setFormColor] = useState("#4285F4");
   const [allDayEvents, setAllDayEvents] = useState(false);
 
-  // Test Data
-  const [userData, setUserData] = useState([
-    {
-      userID: "johnDoe",
-      age: 25,
-      events: [
-        {
-          eventID: uniqid(),
-          title: "2nd Year Anniversary",
-          description:
-            "Happy 2 Year Anniversary, Josue! I love you 💕 so much!!",
-          startTime: "2025-01-22",
-          endTime: "2025-01-22",
-          allDay: true,
-          assignedColor: "orange",
-          owner: "johnDoe",
-        },
-        {
-          eventID: uniqid(),
-          title: "Marleny's Birthday 🎂",
-          description:
-            "Happy Birthday Marleny!! Wish you the best friend! ☺️🥳",
-          startTime: "2025-05-15T10:00:00",
-          endTime: "2025-05-15T23:45:00",
-          allDay: false,
-          assignedColor: "green",
-          owner: "johnDoe",
-        },
-        {
-          eventID: uniqid(),
-          title: "Pedro's Birthday 🎂",
-          description: "Happy Birthday!!",
-          startTime: "2025-02-10T10:00:00",
-          endTime: "2025-02-10T23:45:00",
-          allDay: false,
-          assignedColor: "orange",
-          owner: "johnDoe",
-        },
-      ],
-    },
-  ]);
+  const [userData, setUserData] = useState(userInfo);
+
+  // // Test Data
+  // const [userData, setUserData] = useState([
+  //   {
+  //     userID: "johnDoe",
+  //     age: 25,
+  //     events: [
+  //       {
+  //         eventID: uniqid(),
+  //         title: "2nd Year Anniversary",
+  //         description:
+  //           "Happy 2 Year Anniversary, Josue! I love you 💕 so much!!",
+  //         startTime: "2025-01-22",
+  //         endTime: "2025-01-22",
+  //         allDay: true,
+  //         assignedColor: "orange",
+  //         owner: "johnDoe",
+  //       },
+  //       {
+  //         eventID: uniqid(),
+  //         title: "Marleny's Birthday 🎂",
+  //         description:
+  //           "Happy Birthday Marleny!! Wish you the best friend! ☺️🥳",
+  //         startTime: "2025-05-15T10:00:00",
+  //         endTime: "2025-05-15T23:45:00",
+  //         allDay: false,
+  //         assignedColor: "green",
+  //         owner: "johnDoe",
+  //       },
+  //       {
+  //         eventID: uniqid(),
+  //         title: "Pedro's Birthday 🎂",
+  //         description: "Happy Birthday!!",
+  //         startTime: "2025-02-10T10:00:00",
+  //         endTime: "2025-02-10T23:45:00",
+  //         allDay: false,
+  //         assignedColor: "orange",
+  //         owner: "johnDoe",
+  //       },
+  //     ],
+  //   },
+  // ]);
 
   const [show, setShow] = useState(false);
 
