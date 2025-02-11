@@ -62,7 +62,6 @@ function App() {
       <Container
         fluid
         className="d-flex justify-content-center align-items-center"
-        style={{ height: "100dvh" }}
       >
         <Row>
           <Col sm={2}>

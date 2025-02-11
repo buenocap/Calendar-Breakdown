@@ -1,6 +1,7 @@
 import "./Sidebar.css";
-import { Container } from "react-bootstrap";
-import EventList from "./EventList";
+import Container from "react-bootstrap/Container";
+
+import Accordion from "react-bootstrap/Accordion";
 
 export default function Sidebar({ UserData }) {
   //Get events from user
@@ -9,9 +10,14 @@ export default function Sidebar({ UserData }) {
     <div>
       <h3>Upcoming Events</h3>
       <Container>
-        {events.map((event) => (
-          <EventList event={event} key={event.eventID} />
-        ))}
+        <Accordion>
+          {events.map((event) => (
+            <Accordion.Item eventKey={event.eventID}>
+              <Accordion.Header>{event.title}</Accordion.Header>
+              <Accordion.Body>{event.description}</Accordion.Body>
+            </Accordion.Item>
+          ))}
+        </Accordion>
       </Container>
     </div>
   );
