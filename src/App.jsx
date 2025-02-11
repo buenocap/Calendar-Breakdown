@@ -54,10 +54,21 @@ function App() {
           eventID: uniqid(),
           title: "Book Club Meeting",
           description:
-            "Justin will be holding a book club meeting at his house. Remeber to bring a book!",
+            "Justin will be holding a book club meeting at his house. Remeber to bring a book! he still hasn't decided on a time yet.",
           startTime: "2025-02-22",
           endTime: "2025-02-22",
           allDay: true,
+          assignedColor: "red",
+          owner: "johnDoe",
+        },
+        {
+          eventID: uniqid(),
+          title: "Cooking Class",
+          description:
+            "Joining Amber for a cooking class at Cooper's at 6pm till 8pm. Remember to bring an apron!",
+          startTime: "2025-02-22T18:00:00",
+          endTime: "2025-02-22T20:00:00",
+          allDay: false,
           assignedColor: "red",
           owner: "johnDoe",
         },
