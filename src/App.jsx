@@ -69,7 +69,7 @@ function App() {
           startTime: "2025-02-22T18:00:00",
           endTime: "2025-02-22T20:00:00",
           allDay: false,
-          assignedColor: "red",
+          assignedColor: "blue",
           owner: "johnDoe",
         },
       ],
