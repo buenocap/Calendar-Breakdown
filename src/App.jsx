@@ -23,8 +23,7 @@ function App() {
         {
           eventID: uniqid(),
           title: "2nd Year Anniversary",
-          description:
-            "Happy 2 Year Anniversary, Josue! I love you 💕 so much!!",
+          description: "Happy 2 Year Anniversary",
           startTime: "2025-01-22",
           endTime: "2025-01-22",
           allDay: true,
@@ -34,8 +33,7 @@ function App() {
         {
           eventID: uniqid(),
           title: "Marleny's Birthday 🎂",
-          description:
-            "Happy Birthday Marleny!! Wish you the best friend! ☺️🥳",
+          description: "Happy Birthday Marleny!!",
           startTime: "2025-05-15T10:00:00",
           endTime: "2025-05-15T23:45:00",
           allDay: false,
@@ -50,6 +48,17 @@ function App() {
           endTime: "2025-02-10T23:45:00",
           allDay: false,
           assignedColor: "orange",
+          owner: "johnDoe",
+        },
+        {
+          eventID: uniqid(),
+          title: "Book Club Meeting",
+          description:
+            "Justin will be holding a book club meeting at his house. Remeber to bring a book!",
+          startTime: "2025-02-22",
+          endTime: "2025-02-22",
+          allDay: true,
+          assignedColor: "red",
           owner: "johnDoe",
         },
       ],
