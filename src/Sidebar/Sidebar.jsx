@@ -8,12 +8,16 @@ export default function Sidebar({ UserData }) {
   const events = UserData[0].events;
   return (
     <div>
-      <h3>Upcoming Events</h3>
+      <Container fluid>
+        <h4 className="mt-2 sidebar-title">Upcoming Events</h4>
+      </Container>
       <Container>
         <Accordion>
           {events.map((event) => (
             <Accordion.Item eventKey={event.eventID}>
-              <Accordion.Header>{event.title}</Accordion.Header>
+              <Accordion.Header>
+                <span className="ecplise-text">{event.title}</span>
+              </Accordion.Header>
               <Accordion.Body>{event.description}</Accordion.Body>
             </Accordion.Item>
           ))}
