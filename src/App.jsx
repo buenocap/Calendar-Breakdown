@@ -84,12 +84,12 @@ function App() {
         className="d-flex justify-content-center align-items-center mb-3"
       >
         <Row>
-          <Col sm={2} className="m-1">
+          <Col sm={2}>
             <Card className="shadow height-adjust mb-3">
               <Sidebar UserData={userData} />
             </Card>
           </Col>
-          <Col sm={9} className="m-1">
+          <Col sm={10}>
             <Card className="shadow height-adjust">
               <Calendar userInfo={userData} />
             </Card>
