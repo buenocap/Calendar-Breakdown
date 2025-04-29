@@ -14,7 +14,7 @@ export default function Sidebar({ UserData }) {
       <Container>
         <Accordion>
           {events.map((event) => (
-            <Accordion.Item eventKey={event.eventID}>
+            <Accordion.Item eventKey={event.eventID} key={event.eventID}>
               <Accordion.Header>
                 <span className="ecplise-text">{event.title}</span>
               </Accordion.Header>
