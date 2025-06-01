@@ -1,12 +1,13 @@
 .icon-format {
   display: flex;
   gap: 0.5rem;
+  align-items: baseline;
 }
 
 .icon-format-title {
   display: flex;
   gap: 0.5rem;
-  align-items: center;
+  align-items: baseline;
 }
 
 .eventColor {

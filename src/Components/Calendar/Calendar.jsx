@@ -6,9 +6,9 @@ import CellContainer from "./CellContainer";
 import Button from "react-bootstrap/Button";
 import Modal from "react-bootstrap/Modal";
 import Form from "react-bootstrap/Form";
-import uniqid from "uniqid";
+import axios from "axios";
 
-export default function Calendar({ userInfo }) {
+export default function Calendar({ eventData, userData, refresh, loading }) {
   // Date State Control
   const today = new Date();
   const [selectedMonth, setSelectedMonth] = useState(today.getMonth() + 1);
@@ -19,54 +19,16 @@ export default function Calendar({ userInfo }) {
   const [formDescription, setFormDescription] = useState("");
   const [formStartTime, setFormStartTime] = useState("");
   const [formEndTime, setFormEndTime] = useState("");
+  const [formStartDate, setFormStartDate] = useState("");
+  const [formEndDate, setFormEndDate] = useState("");
+  const [formLocation, setFormLocation] = useState("");
   const [formColor, setFormColor] = useState("#4285F4");
-  const [allDayEvents, setAllDayEvents] = useState(false);
-
-  const [userData, setUserData] = useState(userInfo);
-
-  // // Test Data
-  // const [userData, setUserData] = useState([
-  //   {
-  //     userID: "johnDoe",
-  //     age: 25,
-  //     events: [
-  //       {
-  //         eventID: uniqid(),
-  //         title: "2nd Year Anniversary",
-  //         description:
-  //           "Happy 2 Year Anniversary, Josue! I love you 💕 so much!!",
-  //         startTime: "2025-01-22",
-  //         endTime: "2025-01-22",
-  //         allDay: true,
-  //         assignedColor: "orange",
-  //         owner: "johnDoe",
-  //       },
-  //       {
-  //         eventID: uniqid(),
-  //         title: "Marleny's Birthday 🎂",
-  //         description:
-  //           "Happy Birthday Marleny!! Wish you the best friend! ☺️🥳",
-  //         startTime: "2025-05-15T10:00:00",
-  //         endTime: "2025-05-15T23:45:00",
-  //         allDay: false,
-  //         assignedColor: "green",
-  //         owner: "johnDoe",
-  //       },
-  //       {
-  //         eventID: uniqid(),
-  //         title: "Pedro's Birthday 🎂",
-  //         description: "Happy Birthday!!",
-  //         startTime: "2025-02-10T10:00:00",
-  //         endTime: "2025-02-10T23:45:00",
-  //         allDay: false,
-  //         assignedColor: "orange",
-  //         owner: "johnDoe",
-  //       },
-  //     ],
-  //   },
-  // ]);
+  const [allDayEvent, setAllDayEvent] = useState(false);
 
   const [show, setShow] = useState(false);
+
+  // Loading State
+  const [submitting, setSubmitting] = useState(false);
 
   const handleClose = () => setShow(false);
   const handleShow = () => setShow(true);
@@ -79,43 +41,57 @@ export default function Calendar({ userInfo }) {
    *
    * @param {Object} e - The event object emitted by the form submission.
    */
-  const handleAddEvent = (e) => {
+  const handleAddEvent = async (e) => {
     // Prevent the form from submitting
     e.preventDefault();
 
-    // Create a new event object
-    let newEvent = {
-      eventID: uniqid(),
+    // Prevent multiple submissions
+    if (submitting) return;
+    setSubmitting(true);
+
+    // Construct a new event object using form data
+    const newEvent = {
       title: formTitle,
-      description: formDescription || "",
-      startTime: formStartTime || "",
-      endTime: formEndTime || "",
-      allDay: allDayEvents,
-      assignedColor: formColor || "#4285F4",
-      owner: e.target.formOwner?.value,
+      description: formDescription,
+      startTime: formStartTime,
+      endTime: formEndTime,
+      startDate: formStartDate,
+      endDate: formEndDate,
+      location: formLocation,
+      assignedColor: formColor,
+      allDay: allDayEvent,
+      user: userData.id,
     };
 
-    // Add the new event to the user's events
-    const updatedUserData = JSON.parse(JSON.stringify(userData));
-    const userIndex = updatedUserData.findIndex(
-      (user) => user.userID === e.target.formOwner?.value
-    );
-    if (userIndex !== -1) {
-      updatedUserData[userIndex].events = [
-        ...updatedUserData[userIndex].events,
-        newEvent,
-      ];
-    }
-    setUserData(updatedUserData);
-    handleClose();
+    try {
+      const response = await axios.post(
+        "http://localhost:3000/events/add",
+        newEvent
+      );
 
-    // Reset the form fields
-    setFormTitle("");
-    setFormDescription("");
-    setFormStartTime("");
-    setFormEndTime("");
-    setAllDayEvents(false);
-    setFormColor("#4285F4");
+      // Clear form fields
+      setFormTitle("");
+      setFormDescription("");
+      setFormStartTime("");
+      setFormEndTime("");
+      setFormStartDate("");
+      setFormEndDate("");
+      setFormLocation("");
+      setFormColor("#4285F4");
+      setAllDayEvent(false);
+
+      // Trigger refresh to update events
+      refresh();
+
+      handleClose();
+    } catch (error) {
+      console.error(
+        "Error adding event:",
+        error.response?.data || error.message
+      );
+    } finally {
+      setSubmitting(false);
+    }
   };
 
   const handleDeleteEvent = (event) => {
@@ -173,10 +149,11 @@ export default function Calendar({ userInfo }) {
           <CellContainer
             type="number"
             number={dayNum}
-            userData={userData}
+            eventData={eventData}
             onDelete={handleDeleteEvent}
             cellIdentifier={`${year}-${monthString}-${dayString}`}
             key={`Cell-${year}-${monthString}-${dayNum}`}
+            refresh={refresh}
           />
         );
       }
@@ -195,10 +172,11 @@ export default function Calendar({ userInfo }) {
             <CellContainer
               type="number"
               number={dayNum}
-              userData={userData}
+              eventData={eventData}
               onDelete={handleDeleteEvent}
               cellIdentifier={`${year}-${monthString}-${dayString}`}
               key={`Cell-${year}-${monthString}-${dayString}`}
+              refresh={refresh}
             />
           );
           dayNum++;
@@ -271,102 +249,129 @@ export default function Calendar({ userInfo }) {
         <Button variant="primary" onClick={handleShow}>
           Add Event
         </Button>
-
+        {/** MODAL */}
         <Modal show={show} onHide={handleClose}>
           <Modal.Header closeButton>
             <Modal.Title>Add Event</Modal.Title>
           </Modal.Header>
+          {/** FORM */}
           <Modal.Body>
-            <Form onSubmit={(e) => handleAddEvent(e)}>
-              <Form.Group className="mb-3" controlId="formColor">
-                <Form.Label>Event Color</Form.Label>
+            <Form onSubmit={handleAddEvent}>
+              {/** Title Input */}
+              <Form.Group className="mb-3">
+                <Form.Label>Title</Form.Label>
+                <Form.Control
+                  type="text"
+                  placeholder="Enter event name"
+                  onChange={(e) => setFormTitle(e.target.value)}
+                  required
+                />
+              </Form.Group>
+
+              {/** All Day Input Check */}
+              <Form.Group className="mb-3">
+                <Form.Check
+                  type="checkbox"
+                  label="All Day"
+                  onChange={(e) => setAllDayEvent(e.target.checked)}
+                />
+              </Form.Group>
+
+              {allDayEvent ? (
+                <div>
+                  {/** Date Input */}
+                  <Form.Group className="mb-3 ">
+                    <Form.Label>Date</Form.Label>
+                    <Form.Control
+                      type="date"
+                      onChange={(e) => setFormStartDate(e.target.value)}
+                    />
+                  </Form.Group>
+                </div>
+              ) : (
+                <div>
+                  {/** Date Input */}
+                  <Form.Group className="mb-3 flex-input">
+                    <Form.Label>Date</Form.Label>
+                    <Form.Control
+                      type="date"
+                      onChange={(e) => setFormStartDate(e.target.value)}
+                    />
+                    -
+                    <Form.Control
+                      type="date"
+                      onChange={(e) => setFormEndDate(e.target.value)}
+                    />
+                  </Form.Group>
+
+                  {/** Time Input */}
+                  <Form.Group className="mb-3 flex-input">
+                    <Form.Label>Time</Form.Label>
+                    <Form.Control
+                      type="time"
+                      onChange={(e) => setFormStartTime(e.target.value)}
+                    />
+                    -
+                    <Form.Control
+                      type="time"
+                      onChange={(e) => setFormEndTime(e.target.value)}
+                    />
+                  </Form.Group>
+                </div>
+              )}
+
+              {/** Location Input */}
+              <Form.Group className="mb-3">
+                <Form.Label>Location</Form.Label>
+                <Form.Control
+                  type="text"
+                  placeholder="Enter event location"
+                  onChange={(e) => setFormLocation(e.target.value)}
+                />
+              </Form.Group>
+
+              {/** Color Input */}
+              <Form.Group className="mb-3">
+                <Form.Label>Color</Form.Label>
                 <Form.Control
                   type="color"
                   value={formColor}
                   onChange={(e) => setFormColor(e.target.value)}
                 />
               </Form.Group>
-              <Form.Group className="mb-3" controlId="formTitle">
-                <Form.Label>Event Title</Form.Label>
+
+              {/** Description Input */}
+              <Form.Group className="mb-3">
+                <Form.Label>Description</Form.Label>
                 <Form.Control
-                  type="text"
-                  placeholder="Enter Title"
-                  value={formTitle}
-                  onChange={(e) => setFormTitle(e.target.value)}
-                  required
-                />
-              </Form.Group>
-              <Form.Group className="mb-3" controlId="formDescription">
-                <Form.Label>Event Description</Form.Label>
-                <Form.Control
-                  type="text"
-                  placeholder="Enter Description"
-                  value={formDescription}
+                  as={"textarea"}
+                  placeholder="Enter event description"
                   onChange={(e) => setFormDescription(e.target.value)}
                 />
               </Form.Group>
-              <Form.Group className="mb-2 allDay" controlId="formAllDay">
-                <Form.Label>All Day</Form.Label>
-                <Form.Check
-                  type="checkbox"
-                  value={allDayEvents}
-                  onChange={() => setAllDayEvents(!allDayEvents)}
-                />
-              </Form.Group>
-              {/* Only display date and time inputs if allDayEvents is false */}
-              {!allDayEvents && (
-                <>
-                  <Form.Group className="mb-3" controlId="formStartTime">
-                    <Form.Label>Start Date & Time</Form.Label>
-                    <Form.Control
-                      type="datetime-local"
-                      onChange={(e) => setFormStartTime(e.target.value)}
-                      required
-                    />
-                  </Form.Group>
-                  <Form.Group className="mb-3" controlId="formEndTime">
-                    <Form.Label>End Date & Time</Form.Label>
-                    <Form.Control
-                      type="datetime-local"
-                      onChange={(e) => setFormEndTime(e.target.value)}
-                      required
-                    />
-                  </Form.Group>
-                </>
-              )}
-              {/* Only display date inputs if allDayEvents is true */}
-              {allDayEvents && (
-                <>
-                  <Form.Group className="mb-3" controlId="formStartTime">
-                    <Form.Label>Start Date</Form.Label>
-                    <Form.Control
-                      type="date"
-                      placeholder="Enter Start Date"
-                      onChange={(e) => setFormStartTime(e.target.value)}
-                      required
-                    />
-                  </Form.Group>
-                  <Form.Group className="mb-3" controlId="formEndTime">
-                    <Form.Label>End Date</Form.Label>
-                    <Form.Control
-                      type="date"
-                      placeholder="Enter End Date"
-                      onChange={(e) => setFormEndTime(e.target.value)}
-                      required
-                    />
-                  </Form.Group>
-                </>
-              )}
-              <Form.Group controlId="formOwner" hidden>
-                <Form.Label>Owner</Form.Label>
-                <Form.Control type="hidden" value={userData[0].userID} />
-              </Form.Group>
+
+              {/** FOOTER */}
               <Modal.Footer>
-                <Button variant="secondary" onClick={handleClose}>
-                  Close
+                <Button
+                  variant="secondary"
+                  onClick={handleClose}
+                  disabled={submitting}
+                >
+                  Cancel
                 </Button>
-                <Button variant="primary" type="submit">
-                  Save Changes
+                <Button variant="primary" type="submit" disabled={submitting}>
+                  {submitting ? (
+                    <>
+                      <span
+                        className="spinner-border spinner-border-sm me-2"
+                        role="status"
+                        aria-hidden="true"
+                      ></span>
+                      Adding...
+                    </>
+                  ) : (
+                    "Add"
+                  )}
                 </Button>
               </Modal.Footer>
             </Form>

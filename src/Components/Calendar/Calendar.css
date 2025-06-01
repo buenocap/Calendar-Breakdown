@@ -40,3 +40,9 @@ td {
 .input-label {
   margin-right: 0.25rem;
 }
+
+.flex-input {
+  display: flex;
+  gap: 0.5rem;
+  align-items: center;
+}

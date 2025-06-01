@@ -6,13 +6,22 @@ import "./CellContainer.css";
 export default function CellContainer({
   type,
   number,
-  userData,
+  eventData,
   cellIdentifier,
   onDelete,
+  refresh,
 }) {
   const [show, setShow] = useState(false);
   const [currentID, setCurrentID] = useState(0);
   const [currentEvent, setCurrentEvent] = useState({});
+  const [data, setData] = useState([]);
+
+  // useEffect(() => {
+  //   if (eventData) {
+  //     refresh();
+  //   }
+  // }, [eventData]);
+
   const handleClose = () => {
     setEditMode(false);
     setShow(false);
@@ -50,20 +59,32 @@ export default function CellContainer({
     const randomIndex = Math.floor(Math.random() * headerImage.length);
     setSelectedImage(headerImage[randomIndex]);
   }
-
   function displayEvent(id) {
-    setCurrentID(id);
-    let testing = userData.map((user) =>
-      user.events.find((event) => event.eventID === id)
-    );
-    setCurrentEvent(testing[0]);
+    setCurrentEvent(eventData.find((event) => event._id == id));
     selectRandomImage();
     handleShow();
-    setCurrentEvent(testing[0]);
   }
 
-  function resolveTimestamp(startTimeStamp, endTimeStamp, allDay) {
-    const Months = [
+  function trimDate(date) {
+    const newDate = date?.split("T")[0];
+    return newDate;
+  }
+
+  function toISOformat(date) {
+    let [month, day, year] = date.split("/");
+    if (month < 10) {
+      month = "0" + month;
+    }
+
+    if (day < 10) {
+      day = "0" + day;
+    }
+
+    return `${year}-${month}-${day}`;
+  }
+
+  function formatEvent(currentEvent) {
+    const months = [
       "January",
       "February",
       "March",
@@ -78,51 +99,59 @@ export default function CellContainer({
       "December",
     ];
 
-    // Check if the event is all day
-    if (allDay == true) {
-      let [year, month, day] = startTimeStamp?.split("-");
-      let [end, endMonth, endDay] = endTimeStamp?.split("-");
+    function convertTo12Hour(timeString) {
+      if (!timeString) {
+        return;
+      }
 
-      return `${Months[month - 1]} ${day}, ${year} - ${
-        Months[endMonth - 1]
-      } ${endDay}, ${end}`;
+      const [hr, min] = timeString.split(":");
+      let period = "AM";
+      let hour12 = parseInt(hr, 10);
+
+      if (hour12 === 0) {
+        hour12 = 12;
+      } else if (hour12 === 12) {
+        period = "PM";
+      } else if (hour12 > 12) {
+        hour12 -= 12;
+        period = "PM";
+      }
+
+      const formattedMinutes = min.padStart(2, "0");
+      return `${hour12}:${formattedMinutes} ${period}`;
     }
 
-    if (startTimeStamp && endTimeStamp) {
-      let [startDate, startTime] = startTimeStamp?.split("T");
-      let [endDate, endTime] = endTimeStamp?.split("T");
+    const startDate = trimDate(currentEvent.startDate);
+    const endDate = trimDate(currentEvent.endDate);
 
-      return formatTime(startDate, startTime, endDate, endTime, Months);
+    //Conver startTime and endTime to 12hr format
+    const startTime = convertTo12Hour(currentEvent.startTime);
+    const endTime = convertTo12Hour(currentEvent.endTime);
+
+    // If no start or end date, return (Blank cell)
+    if (!startDate && !endDate) {
+      return;
     }
 
-    return 1;
-  }
-
-  function toISOformat(date) {
-    let [month, day, year] = date.split("/");
-    if (month < 10) {
-      month = "0" + month;
+    // If no end date, return start date with start and end time
+    if (!endDate) {
+      const [year, month, day] = startDate.split("-");
+      return `${months[month - 1]} ${day}, ${year} ${
+        currentEvent.startTime ? `• ${startTime} - ${endTime}` : ""
+      }`;
     }
 
-    // if (day < 10) {
-    //   day = "0" + day;
-    // }
+    // If start and end date, return start date with start time and end date with end time
+    const [startYear, startMonth, startDay] = startDate.split("-");
+    const [endYear, endMonth, endDay] = endDate.split("-");
 
-    return `${year}-${month}-${day}`;
-  }
-
-  function formatTime(startDate, startTime, endDate, endTime, Months) {
-    if (startDate == endDate) {
-      const [year, month, day] = startDate?.split("-");
-      const [hr, min] = startTime?.split(":");
-      const [hr2, min2] = endTime?.split(":");
-      return `${Months[month - 1]} ${day}, ${year} • 
-      ${hr > 12 ? hr - 12 : hr}:${min} ${hr > 12 ? "PM" : "AM"} - ${
-        hr2 > 12 ? hr2 - 12 : hr2
-      }:${min2} ${hr2 > 12 ? "PM" : "AM"}`;
-    }
-
-    return `${startDate} • ${startTime} - ${endDate} • ${endTime}`;
+    return `${months[startMonth - 1]} ${startDay}, ${startYear}, ${
+      currentEvent.startTime
+        ? `${startTime} - ${
+            months[endMonth - 1]
+          } ${endDay}, ${endYear}, ${endTime}`
+        : ""
+    }`;
   }
 
   switch (type) {
@@ -141,33 +170,30 @@ export default function CellContainer({
               {number}
             </div>
             <div>
-              {userData.map((user) => {
-                return user.events.map((event) => {
-                  let eventStartDate = event.startTime.split("T")[0];
-
-                  if (cellIdentifier === eventStartDate) {
-                    return (
-                      <div
-                        className="overflowControl"
-                        key={event.eventID}
-                        style={{
-                          backgroundColor: event.assignedColor,
-                          borderRadius: "5px",
-                          paddingLeft: "5px",
-                          margin: "1px",
-                          cursor: "pointer",
-                        }}
-                        id={event.eventID}
-                        onClick={(e) => displayEvent(e.target.id)}
-                      >
-                        {event.title}
-                      </div>
-                    );
-                  }
-                });
+              {eventData.map((data) => {
+                if (trimDate(data.startDate) == cellIdentifier) {
+                  return (
+                    <div
+                      className="overflowControl event"
+                      key={data._id}
+                      style={{
+                        backgroundColor: data.assignedColor,
+                        borderRadius: "5px",
+                        paddingLeft: "5px",
+                        margin: "1px",
+                        cursor: "pointer",
+                      }}
+                      onClick={() => displayEvent(data._id)}
+                    >
+                      {data.title}
+                    </div>
+                  );
+                }
               })}
             </div>
           </td>
+
+          {/*MODAL*/}
           <Modal show={show} onHide={handleClose}>
             <Modal.Header>
               <Modal.Title>
@@ -184,13 +210,11 @@ export default function CellContainer({
               </div>
               <div className="icon-format">
                 <i className="bi bi-calendar"></i>
-                <p>
-                  {resolveTimestamp(
-                    currentEvent?.startTime,
-                    currentEvent?.endTime,
-                    currentEvent?.allDay
-                  )}
-                </p>
+                <p>{formatEvent(currentEvent)}</p>
+              </div>
+              <div className="icon-format">
+                <i className="bi bi-geo-alt"></i>
+                <p>{currentEvent?.location}</p>
               </div>
               <div className="icon-format">
                 <i className="bi bi-justify-left"></i>
