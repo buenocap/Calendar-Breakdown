@@ -145,11 +145,11 @@ export default function CellContainer({
     const [startYear, startMonth, startDay] = startDate.split("-");
     const [endYear, endMonth, endDay] = endDate.split("-");
 
-    return `${months[startMonth - 1]} ${startDay}, ${startYear}, ${
+    return `${months[startMonth - 1]} ${startDay}, ${startYear} • ${
       currentEvent.startTime
         ? `${startTime} - ${
             months[endMonth - 1]
-          } ${endDay}, ${endYear}, ${endTime}`
+          } ${endDay}, ${endYear} • ${endTime}`
         : ""
     }`;
   }

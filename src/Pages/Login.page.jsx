@@ -1,6 +1,7 @@
 import { useState } from "react";
 import Button from "react-bootstrap/Button";
 import Form from "react-bootstrap/Form";
+
 import axios from "axios";
 import { useNavigate, Link } from "react-router-dom";
 
@@ -9,6 +10,7 @@ export default function Login() {
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
+  const [show, setShow] = useState(false);
   const navigate = useNavigate();
 
   const handleSubmit = async (e) => {
@@ -28,7 +30,6 @@ export default function Login() {
       // Store user info
       localStorage.setItem("user", JSON.stringify(response.data.user));
 
-      // Redirect to home page
       navigate("/Home");
     } catch (error) {
       setError(

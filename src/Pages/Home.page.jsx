@@ -7,6 +7,8 @@ import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
 import Card from "react-bootstrap/Card";
 import { useState, useEffect, useCallback } from "react";
+import Overlay from "react-bootstrap/Overlay";
+import Toast from "react-bootstrap/Toast";
 import axios from "axios";
 
 export default function Home() {
@@ -17,6 +19,9 @@ export default function Home() {
   // Loading states
   const [eventsLoading, setEventsLoading] = useState(false);
   const [userLoading, setUserLoading] = useState(true);
+
+  // Toast state
+  const [showToast, setShowToast] = useState(false);
 
   const refreshTrigger = useCallback(() => {
     setRefresh((prevRefresh) => prevRefresh + 1);

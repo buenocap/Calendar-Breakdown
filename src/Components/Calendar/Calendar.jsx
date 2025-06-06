@@ -95,18 +95,8 @@ export default function Calendar({ eventData, userData, refresh, loading }) {
   };
 
   const handleDeleteEvent = (event) => {
-    // Remove the event from the user's events
-    const updatedUserData = JSON.parse(JSON.stringify(userData));
-    const userIndex = updatedUserData.findIndex(
-      (user) => user.userID === event.owner
-    );
-    if (userIndex !== -1) {
-      updatedUserData[userIndex].events = updatedUserData[
-        userIndex
-      ].events.filter((e) => e.eventID !== event.eventID);
-    }
-
-    setUserData(updatedUserData);
+    axios.delete(`http://localhost:3000/events/delete/${event._id}`);
+    refresh();
   };
 
   function handleMonthChange(e) {
