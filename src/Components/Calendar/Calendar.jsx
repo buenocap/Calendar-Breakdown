@@ -95,6 +95,8 @@ export default function Calendar({ eventData, userData, refresh, loading }) {
   };
 
   const handleDeleteEvent = (event) => {
+    const isConfirmed = window.confirm("Are you sure you want to delete?");
+    if (!isConfirmed) return;
     axios.delete(`http://localhost:3000/events/delete/${event._id}`);
     refresh();
   };
