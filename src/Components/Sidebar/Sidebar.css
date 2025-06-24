@@ -3,10 +3,24 @@
 }
 
 .sidebar-title {
-  font-size: 2.5vw;
+  font-size: 1.5rem;
   text-align: center;
   word-break: keep-all;
   font-weight: bolder;
+  position: sticky;
+  top: 0;
+  z-index: 10;
+  padding: 10px 0;
+  margin-bottom: 10px;
+}
+
+.sidebar-content {
+  overflow-y: auto;
+  max-height: calc(100vh);
+}
+
+.sidebar-section {
+  margin-bottom: 20px;
 }
 
 .ecplise-text {
