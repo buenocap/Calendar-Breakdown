@@ -93,11 +93,11 @@ export default function Home() {
         className="d-flex justify-content-center align-items-center mb-3"
       >
         <Row>
-          {/* <Col sm={2}>
+          <Col sm={2}>
             <Card className="shadow height-adjust mb-3">
-              <Sidebar UserData={userData} />
+              <Sidebar userData={userData} eventData={events} />
             </Card>
-          </Col> */}
+          </Col>
           <Col sm={10}>
             <Card className="shadow height-adjust">
               <Calendar
