@@ -214,7 +214,13 @@ export default function CellContainer({
               </div>
               <div className="icon-format">
                 <i className="bi bi-geo-alt"></i>
-                <p>{currentEvent?.location}</p>
+                {currentEvent?.location ? (
+                  <p>{currentEvent?.location}</p>
+                ) : (
+                  <p style={{ fontStyle: "italic", color: "gray" }}>
+                    No Location
+                  </p>
+                )}
               </div>
               <div className="icon-format">
                 <i className="bi bi-justify-left"></i>
