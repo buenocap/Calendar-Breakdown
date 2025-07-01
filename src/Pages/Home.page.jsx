@@ -7,9 +7,8 @@ import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
 import Card from "react-bootstrap/Card";
 import { useState, useEffect, useCallback } from "react";
-import Overlay from "react-bootstrap/Overlay";
-import Toast from "react-bootstrap/Toast";
 import axios from "axios";
+import { API_BASE_URL } from "../config/api.js";
 
 export default function Home() {
   // Test Data
@@ -56,7 +55,7 @@ export default function Home() {
       setEventsLoading(true);
       try {
         const response = await axios.get(
-          `http://localhost:3000/events/user/${userData.id}`
+          `${API_BASE_URL}/events/user/${userData.id}`
         );
         setEvents(response.data);
       } catch (error) {

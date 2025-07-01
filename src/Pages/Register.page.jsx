@@ -19,14 +19,11 @@ export default function Register() {
     setError("");
 
     try {
-      const response = await axios.post(
-        "http://localhost:3000/users/register",
-        {
-          username,
-          email,
-          password,
-        }
-      );
+      const response = await axios.post(`${API_BASE_URL}/users/register`, {
+        username,
+        email,
+        password,
+      });
 
       //Redirect to login page
       navigate("/Login");

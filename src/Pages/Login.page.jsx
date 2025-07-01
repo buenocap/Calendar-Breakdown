@@ -19,7 +19,7 @@ export default function Login() {
     setError("");
 
     try {
-      const response = await axios.post("http://localhost:3000/users/login", {
+      const response = await axios.post(`${API_BASE_URL}/users/login`, {
         email,
         password,
       });

@@ -7,6 +7,7 @@ import Button from "react-bootstrap/Button";
 import Modal from "react-bootstrap/Modal";
 import Form from "react-bootstrap/Form";
 import axios from "axios";
+import { API_BASE_URL } from "../../config/api";
 
 export default function Calendar({ eventData, userData, refresh, loading }) {
   // Date State Control
@@ -64,10 +65,7 @@ export default function Calendar({ eventData, userData, refresh, loading }) {
     };
 
     try {
-      const response = await axios.post(
-        "http://localhost:3000/events/add",
-        newEvent
-      );
+      const response = await axios.post(`${API_BASE_URL}/events/add`, newEvent);
 
       // Clear form fields
       setFormTitle("");
@@ -97,7 +95,7 @@ export default function Calendar({ eventData, userData, refresh, loading }) {
   const handleDeleteEvent = (event) => {
     const isConfirmed = window.confirm("Are you sure you want to delete?");
     if (!isConfirmed) return;
-    axios.delete(`http://localhost:3000/events/delete/${event._id}`);
+    axios.delete(`${API_BASE_URL}/events/delete/${event._id}`);
     refresh();
   };
 

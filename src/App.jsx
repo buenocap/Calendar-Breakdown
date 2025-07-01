@@ -1,6 +1,4 @@
 import "bootstrap/dist/css/bootstrap.min.css";
-import { useState } from "react";
-import uniqid from "uniqid";
 import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
 import "./App.css";
 
